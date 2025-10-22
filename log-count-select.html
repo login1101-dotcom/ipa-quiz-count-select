@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>アクセスログ集計</title>
+<style>
+  body { font-family: "Hiragino Sans", sans-serif; text-align: center; background-color: #fffaf0; }
+  h1 { margin: 20px 0; }
+  table { margin: 0 auto; border-collapse: collapse; }
+  th, td { border: 1px solid #ccc; padding: 8px 16px; }
+  th { background-color: #bfe0d2; }
+  button { margin-top: 20px; padding: 8px 20px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; }
+</style>
+</head>
+<body>
+<h1>アクセスログ集計</h1>
+<table>
+  <thead>
+    <tr><th>#</th><th>アクセス日時</th><th>所在地</th><th>ユーザー情報</th></tr>
+  </thead>
+  <tbody id="logTable"></tbody>
+</table>
+<button onclick="window.location.href='index-count-select.html'">← クイズ選択画面に戻る</button>
+
+<script>
+async function loadLogs() {
+  const logs = JSON.parse(localStorage.getItem("accessLogs") || "[]");
+  const tbody = document.getElementById("logTable");
+
+  // 現在のIP位置情報を取得
+  let locationInfo = "取得中...";
+  try {
+    const res = await fetch("https://ipapi.co/json/");
+    const data = await res.json();
+    locationInfo = `${data.city}, ${data.region}（${data.country_name}）`;
+  } catch (e) {
+    locationInfo = "取得失敗";
+  }
+
+  logs.forEach((log, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${i + 1}</td><td>${log.time}</td><td>${locationInfo}</td><td>${log.user}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+loadLogs();
+</script>
+</body>
+</html>

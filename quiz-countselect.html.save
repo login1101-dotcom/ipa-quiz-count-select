@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>IPAフォニックス クイズ<br>苦手な母音を選択してください</title>
+<style>
+  body {
+    font-family: "Arial", sans-serif;
+    background-color: #fffaf0;
+    text-align: center;
+  }
+  h1 { margin-top: 20px; }
+  table {
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+  }
+  th { background-color: #bde0fe; }
+  td { background-color: #fff8dc; }
+  button {
+    margin: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+  <h1>IPAフォニックス クイズ<br>苦手な母音を選択してください</h1>
+  <table>
+    <tr><th>区分</th><th>母音名</th><th>記号</th><th>選択</th></tr>
+  </table>
+
+  <button id="startButton">選択してクイズを開始</button>
+
+  <script>
+    const vowels = [
+      { name: "short a", symbol: "æ" },
+      { name: "short e", symbol: "e" },
+      { name: "short i", symbol: "ɪ" },
+      { name: "short o", symbol: "ɒ" },
+      { name: "short u", symbol: "ʌ" },
+      { name: "long a", symbol: "eɪ" },
+      { name: "long e", symbol: "iː" },
+      { name: "long i", symbol: "aɪ" },
+      { name: "long o", symbol: "oʊ" },
+      { name: "long u", symbol: "uː" },
+      { name: "ar sound", symbol: "ɑːr" },
+      { name: "er sound", symbol: "ɜːr" },
+      { name: "or sound", symbol: "ɔːr" },
+      { name: "air sound", symbol: "eər" },
+      { name: "ear sound", symbol: "ɪər" },
+      { name: "ure sound", symbol: "ʊər" },
+      { name: "schwa", symbol: "ə" }
+    ];
+
+    const table = document.querySelector("table");
+    vowels.forEach(v => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${v.name.includes("short") ? "短母音" : v.name.includes("long") ? "長母音" : "その他"}</td>
+        <td>${v.name}</td>
+        <td>/${v.symbol}/</td>
+        <td><input type="checkbox" value="${v.name}"></td>`;
+      table.appendChild(tr);
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const decoded = decodeURIComponent(decodeURIComponent(aaaparams.get("vowel"aaa) || "") || "");
+    const selected = decoded.split(",").map(v => v.trim().toLowerCase());
+    document.querySelectorAll("input[type='checkbox']").forEach(chk => {
+      if (selected.includes(chk.value.toLowerCase())) chk.checked = true;
+    });
+
+    document.getElementById("startButton").addEventListener("click", () => {
+      const chosen = Array.from(document.querySelectorAll("input:checked")).map(c => c.value);
+      if (chosen.length === 0) {
+        alert("母音が選択されていません");
+        return;
+      }
+      location.href = `quiz.html?vowel=${encodeURIComponent(chosen.join(","))}`;
+    });
+  </script>
+</body>
+</html>

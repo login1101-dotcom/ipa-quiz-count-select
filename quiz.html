@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>IPAフォニックス クイズ</title>
+<style>
+  body { font-family: "Arial", sans-serif; background: #fff8e7; text-align: center; }
+  h1 { margin-top: 40px; font-size: 32px; }
+  .question { font-size: 80px; margin: 40px 0 10px; }
+  .examples { margin: 4px 0 24px; font-size: 22px; color: #222; letter-spacing: 0.5px; }
+  .opts { display:grid; grid-template-columns:1fr 1fr; gap:14px; width:min(560px,90vw); margin:0 auto 12px; }
+  .btn { padding:12px 16px; border:2px solid #ddd; border-radius:10px; background:#fff; font-size:18px; }
+  .note { font-size: 14px; color:#555; }
+  .hl { color: #e60000; font-weight: bold; text-shadow: 0 0 1px #900; }
+</style>
+</head>
+<body>
+  <h1>IPAフォニックス クイズ</h1>
+  <div class="question" id="symbol">?</div>
+  <div class="examples" id="examples"></div>
+  <div class="opts">
+    <button class="btn">short a</button><button class="btn">short e</button>
+    <button class="btn">short i</button><button class="btn">short o</button>
+  </div>
+  <div class="note" id="info"></div>
+
+<script>
+const VOWELS = [
+  { name: "short a", symbol: "æ" },
+  { name: "short e", symbol: "e" },
+  { name: "short i", symbol: "ɪ" },
+  { name: "short o", symbol: "ɒ" },
+  { name: "short u", symbol: "ʌ" },
+  { name: "long a", symbol: "eɪ" },
+  { name: "long e", symbol: "iː" },
+  { name: "long i", symbol: "aɪ" },
+  { name: "long o", symbol: "oʊ" },
+  { name: "long u", symbol: "uː" },
+  { name: "ar sound", symbol: "ɑːr" },
+  { name: "er sound", symbol: "ɜːr" },
+  { name: "or sound", symbol: "ɔːr" },
+  { name: "air sound", symbol: "eər" },
+  { name: "ear sound", symbol: "ɪər" },
+  { name: "ure sound", symbol: "ʊər" },
+  { name: "schwa", symbol: "ə" }
+];
+
+const EXAMPLES = {
+  "short a": { words:["cat","map","black"], pattern:/a/g },
+  "short e": { words:["bed","pen","check"], pattern:/e/g },
+  "short i": { words:["sit","pick","milk"], pattern:/i/g },
+  "short o": { words:["pot","box","rock"], pattern:/o/g },
+  "short u": { words:["cup","sun","luck"], pattern:/u/g },
+  "long a": { words:["cake","rain","day"], pattern:/(ai|ay|a)/g },
+  "long e": { words:["see","sea","these"], pattern:/(ee|ea|e)/g },
+  "long i": { words:["light","time","fly"], pattern:/(igh|y|i)/g },
+  "long o": { words:["goat","snow","home"], pattern:/(oa|ow|o)/g },
+  "long u": { words:["food","blue","soup"], pattern:/(oo|ue|u)/g },
+  "ar sound": { words:["car","star","dark"], pattern:/ar/g },
+  "er sound": { words:["her","bird","turn"], pattern:/(er|ir|ur)/g },
+  "or sound": { words:["fork","short","storm"], pattern:/or/g },
+  "air sound": { words:["hair","pair","fair"], pattern:/(air|are|ear)/g },
+  "ear sound": { words:["ear","beer","dear"], pattern:/(eer|ear)/g },
+  "ure sound": { words:["pure","cure","sure"], pattern:/(ure|ur)/g },
+  "schwa": { words:["about","taken","lemon"], pattern:/(a|e|o)/g }
+};
+
+function highlight(word, regex){
+  return word.replace(regex, '<span class="hl">$&</span>');
+}
+
+const params = new URLSearchParams(window.location.search);
+const decoded = decodeURIComponent(params.get("vowel") || "");
+const selected = decoded.split(",").map(v => v.trim().toLowerCase()).filter(Boolean);
+const pool = VOWELS.filter(v => selected.includes(v.name.toLowerCase()));
+
+const symbolDiv = document.getElementById("symbol");
+const examplesDiv = document.getElementById("examples");
+const infoDiv = document.getElementById("info");
+
+if (pool.length === 0) {
+  symbolDiv.textContent = "エラー";
+  infoDiv.textContent = "母音が選択されていません。";
+} else {
+  const v = pool[Math.floor(Math.random() * pool.length)];
+  symbolDiv.textContent = `/${v.symbol}/`;
+  const ex = EXAMPLES[v.name];
+  if (ex) {
+    examplesDiv.innerHTML = ex.words.map(w => highlight(w, ex.pattern)).join(", ");
+  }
+  infoDiv.textContent = "選択：" + v.name;
+}
+</script>
+</body>
+</html>

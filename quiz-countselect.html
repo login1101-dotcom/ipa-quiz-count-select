@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>IPAフォニックス クイズ</title>
+<style>
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #fffaf0;
+  text-align: center;
+}
+table {
+  border-collapse: collapse;
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+}
+th { background-color: #bde0fe; }
+td { background-color: #fff8dc; }
+button {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+<h1>IPAフォニックス クイズ<br>苦手な母音を選択してください</h1>
+<table></table>
+<button id="startButton">選択してクイズ開始</button>
+
+<script>
+const vowels = [
+  { name: "short a", symbol: "æ" },
+  { name: "short e", symbol: "ɛ" },
+  { name: "short i", symbol: "ɪ" },
+  { name: "short o", symbol: "ɑ" },
+  { name: "short oo", symbol: "ʊ" },
+  { name: "short u", symbol: "ʌ" },
+  { name: "long a", symbol: "eɪ" },
+  { name: "long e", symbol: "iː" },
+  { name: "long i", symbol: "aɪ" },
+  { name: "long o", symbol: "oʊ" },
+  { name: "long oo", symbol: "uː" },
+  { name: "ar sound", symbol: "ɑːr" },
+  { name: "er sound", symbol: "ɜːr" },
+  { name: "or sound", symbol: "ɔːr" },
+  { name: "ow sound", symbol: "aʊ" },
+  { name: "oi sound", symbol: "ɔɪ" },
+  { name: "schwa", symbol: "ə" }
+];
+
+const table = document.querySelector("table");
+vowels.forEach(v => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${v.name.includes("short") ? "短母音" : v.name.includes("long") ? "二重母音" : "曖昧母音"}</td>
+    <td>${v.name}</td>
+    <td>${v.symbol}</td>
+    <td><input type="checkbox" value="${v.name}"></td>
+  `;
+  table.appendChild(tr);
+});
+
+const params = new URLSearchParams(window.location.search);
+const decoded = decodeURIComponent(params.get("vowel") || "");
+const selected = decoded.split(",").map(v => v.trim().toLowerCase());
+document.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+  if (selected.includes(chk.value.toLowerCase())) chk.checked = true;
+});
+
+document.getElementById("startButton").addEventListener("click", () => {
+  const chosen = Array.from(document.querySelectorAll('input:checked')).map(c => c.value);
+  if (chosen.length === 0) {
+    alert("母音を選択してください。");
+    return;
+  }
+  location.href = `quiz-countselect?vowel=${encodeURIComponent(chosen.join(","))}`;
+});
+</script>
+</body>
+</html>

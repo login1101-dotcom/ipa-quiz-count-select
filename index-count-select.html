@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>IPAフォニックス クイズ<br>苦手な母音を選択してください</title>
+<style>
+  body {
+    font-family: "Arial", sans-serif;
+    background-color: #fffaf0;
+    text-align: center;
+  }
+  h1 { margin-top: 20px; }
+  table {
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    vertical-align: top;
+  }
+  th { background-color: #bde0fe; }
+  td { background-color: #fff8dc; text-align: left; }
+  .white-cell { background-color: #ffffff !important; }
+  .vowel {
+    background-color: #c1e1c1; /* 柔らかい緑 */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    width: 2em;
+  }
+  .highlight { color: red; font-weight: bold; }
+  label { display: block; margin: 2px 0; }
+  button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 10px;
+  }
+  button:hover { background-color: #0056b3; }
+</style>
+</head>
+<body>
+<h1>IPAフォニックス クイズ<br>苦手な母音を選択してください</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th>短母音</th>
+    <th>二重母音</th>
+    <th>曖昧母音</th>
+  </tr>
+
+  <!-- A -->
+  <tr>
+    <td class="vowel">A</td>
+    <td>
+      <label><input type="checkbox" value="æ"> short a /æ/ c<span class="highlight">a</span>mp, b<span class="highlight">a</span>th, f<span class="highlight">a</span>n</label>
+    </td>
+    <td>
+      <label><input type="checkbox" value="eɪ"> long a /eɪ/ f<span class="highlight">a</span>te, th<span class="highlight">ey</span>, gr<span class="highlight">ea</span>t</label>
+      <label><input type="checkbox" value="ɑːr"> ar sound /ɑːr/ c<span class="highlight">ar</span>, <span class="highlight">ar</span>t, m<span class="highlight">ar</span>k</label>
+    </td>
+    <td>
+      <label><input type="checkbox" value="ə"> Schwa /ə/ <span class="highlight">a</span>bout, s<span class="highlight">u</span>pport, penc<span class="highlight">i</span>l</label>
+    </td>
+  </tr>
+
+  <!-- E -->
+  <tr>
+    <td class="vowel">E</td>
+    <td class="white-cell">
+      <label><input type="checkbox" value="e"> short e /e/ l<span class="highlight">e</span>t, g<span class="highlight">e</span>t, <span class="highlight">e</span>gg</label>
+    </td>
+    <td class="white-cell">
+      <label><input type="checkbox" value="iː"> long e /iː/ f<span class="highlight">ee</span>, sh<span class="highlight">e</span>, bel<span class="highlight">ie</span>ve</label>
+      <label><input type="checkbox" value="ɝː"> er sound /ɝː/ b<span class="highlight">ir</span>d, t<span class="highlight">er</span>m, h<span class="highlight">ur</span>t</label>
+    </td>
+    <td class="white-cell"></td>
+  </tr>
+
+  <!-- I -->
+  <tr>
+    <td class="vowel">I</td>
+    <td>
+      <label><input type="checkbox" value="ɪ"> short i /ɪ/ f<span class="highlight">i</span>t, <span class="highlight">i</span>ncome, <span class="highlight">i</span>t</label>
+    </td>
+    <td>
+      <label><input type="checkbox" value="aɪ"> long i /aɪ/ <span class="highlight">eye</span>, <span class="highlight">i</span>ron, <span class="highlight">i</span>dea</label>
+    </td>
+    <td></td>
+  </tr>
+
+  <!-- O -->
+  <tr>
+    <td class="vowel">O</td>
+    <td class="white-cell">
+      <label><input type="checkbox" value="ɑː"> short o /ɑ/ h<span class="highlight">o</span>t, n<span class="highlight">o</span>t, l<span class="highlight">o</span>ck</label>
+      <label><input type="checkbox" value="ʊ"> short oo /ʊ/ b<span class="highlight">oo</span>k, sh<span class="highlight">ou</span>ld, p<span class="highlight">u</span>t</label>
+    </td>
+    <td class="white-cell">
+      <label><input type="checkbox" value="uː"> long oo /uː/ t<span class="highlight">oo</span>, l<span class="highlight">oo</span>se, thr<span class="highlight">ough</span></label>
+      <label><input type="checkbox" value="oʊ"> long o /oʊ/ n<span class="highlight">o</span>te, n<span class="highlight">o</span>, sl<span class="highlight">o</span>w</label>
+      <label><input type="checkbox" value="aʊ"> ow sound /aʊ/ h<span class="highlight">ou</span>se, <span class="highlight">ou</span>t, c<span class="highlight">ou</span>nt</label>
+      <label><input type="checkbox" value="ɔɪ"> oi sound /ɔɪ/ b<span class="highlight">oy</span>, j<span class="highlight">oy</span>, j<span class="highlight">oi</span>n</label>
+      <label><input type="checkbox" value="ɔːr"> or sound /ɔːr/ f<span class="highlight">or</span>, s<span class="highlight">or</span>t, st<span class="highlight">or</span>m</label>
+    </td>
+    <td class="white-cell"></td>
+  </tr>
+
+  <!-- U -->
+  <tr>
+    <td class="vowel">U</td>
+    <td>
+      <label><input type="checkbox" value="ʌ"> short u /ʌ/ b<span class="highlight">u</span>t, f<span class="highlight">u</span>n, c<span class="highlight">o</span>me</label>
+    </td>
+    <td></td>
+    <td></td>
+  </tr>
+</table>
+
+<button onclick="startQuiz()">選択した母音でクイズ開始</button>
+<button onclick="viewLog()">アクセス集計を見る</button>
+
+<script>
+window.addEventListener("load", () => {
+  const logs = JSON.parse(localStorage.getItem("accessLogs") || "[]");
+  const newLog = { time: new Date().toLocaleString(), user: navigator.userAgent };
+  logs.push(newLog);
+  localStorage.setItem("accessLogs", JSON.stringify(logs));
+});
+function startQuiz() {
+  const selected = Array.from(document.querySelectorAll('input[type=checkbox]:checked')).map(c => c.value);
+  if (selected.length === 0) { alert("少なくとも1つ選んでください。"); return; }
+  localStorage.setItem("selectedVowels", JSON.stringify(selected));
+  window.location.href = "quiz-count-select.html";
+}
+function viewLog() { window.location.href = "log-count-select.html"; }
+</script>
+</body>
+</html>
+<!-- force redeploy -->

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>IPA Quiz（4択クイズ）</title>
+<style>
+  body {
+    font-family: "Hiragino Sans", "Arial", sans-serif;
+    text-align: center;
+    background-color: #fdfcf6;
+  }
+  h1 { margin-top: 20px; }
+  .question { font-size: 28px; margin: 20px 0 10px; }
+  .example { color: gray; font-size: 18px; }
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    justify-content: center;
+    width: 60%;
+    margin: 0 auto;
+  }
+  button {
+    padding: 12px;
+    font-size: 18px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: white;
+  }
+  button.correct { border: 2px solid green; color: green; background-color: #eaffea; }
+  button.wrong { border: 2px solid red; color: red; background-color: #ffeaea; }
+  table {
+    border-collapse: collapse;
+    margin: 20px auto;
+    background-color: white;
+  }
+  th, td { border: 1px solid #ccc; padding: 6px 12px; }
+  th { background-color: #cfe2ff; }
+</style>
+</head>
+<body>
+<h1>IPA Quiz（4択クイズ）</h1>
+<p>このIPAに合う名称を選択</p>
+
+<div class="question" id="ipa"></div>
+<div class="example" id="example"></div>
+<div class="options" id="options"></div>
+<p id="score"></p>
+
+<table>
+  <thead>
+    <tr><th>IPA</th><th>名称</th><th>正解</th><th>不正解</th></tr>
+  </thead>
+  <tbody id="mistakeList"></tbody>
+  <tfoot>
+    <tr><th colspan="2">合計</th><th id="totalCorrect">0</th><th id="totalWrong">0</th></tr>
+  </tfoot>
+</table>
+
+<script>
+const allVowels = {
+  "/æ/": { name: "short a", example: "cat" },
+  "/eɪ/": { name: "long a", example: "cake" },
+  "/ɑːr/": { name: "ar sound", example: "car" },
+  "/ə/": { name: "schwa", example: "sofa" },
+  "/e/": { name: "short e", example: "bed" },
+  "/iː/": { name: "long e", example: "see" },
+  "/ɜːr/": { name: "er sound", example: "bird" },
+  "/ɪ/": { name: "short i", example: "sit" },
+  "/aɪ/": { name: "long i", example: "five" },
+  "/ɑː/": { name: "short o", example: "hot" },
+  "/ʊ/": { name: "short oo", example: "book" },
+  "/uː/": { name: "long oo", example: "food" },
+  "/oʊ/": { name: "long o", example: "go" },
+  "/aʊ/": { name: "ow sound", example: "house" },
+  "/ɔɪ/": { name: "oi sound", example: "boy" },
+  "/ɔːr/": { name: "or sound", example: "for" },
+  "/ʌ/": { name: "short u", example: "cup" }
+};
+
+let selectedVowels = JSON.parse(localStorage.getItem("selectedVowels") || "[]");
+if (selectedVowels.length === 0) {
+  selectedVowels = Object.keys(allVowels);
+}
+
+let score = { correct: 0, wrong: 0 };
+let currentIPA = "";
+let mistakeCount = JSON.parse(localStorage.getItem("mistakeCount") || "{}");
+
+function updateTable() {
+  const tbody = document.getElementById("mistakeList");
+  tbody.innerHTML = "";
+  let totalC = 0, totalW = 0;
+  for (const ipa in mistakeCount) {
+    const r = mistakeCount[ipa];
+    totalC += r.correct || 0;
+    totalW += r.wrong || 0;
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${ipa}</td><td>${r.name}</td><td>${r.correct || 0}</td><td>${r.wrong || 0}</td>`;
+    tbody.appendChild(row);
+  }
+  document.getElementById("totalCorrect").textContent = totalC;
+  document.getElementById("totalWrong").textContent = totalW;
+}
+
+function nextQuestion() {
+  const randomIPA = selectedVowels[Math.floor(Math.random() * selectedVowels.length)];
+  currentIPA = randomIPA;
+  const vowel = allVowels[randomIPA];
+  document.getElementById("ipa").textContent = randomIPA;
+  document.getElementById("example").textContent = "例: " + vowel.example;
+
+  const correct = vowel.name;
+  const allNames = Object.values(allVowels).map(v => v.name);
+  const options = [correct];
+  while (options.length < 4) {
+    const rand = allNames[Math.floor(Math.random() * allNames.length)];
+    if (!options.includes(rand)) options.push(rand);
+  }
+  options.sort(() => Math.random() - 0.5);
+
+  const div = document.getElementById("options");
+  div.innerHTML = "";
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.textContent = opt;
+    btn.onclick = () => checkAnswer(opt, btn);
+    div.appendChild(btn);
+  });
+}
+
+function checkAnswer(answer, btn) {
+  const correct = allVowels[currentIPA].name;
+  const buttons = document.querySelectorAll(".options button");
+
+  if (answer === correct) {
+    btn.classList.add("correct");
+    buttons.forEach(b => b.disabled = true);
+    score.correct++;
+    if (!mistakeCount[currentIPA]) mistakeCount[currentIPA] = { name: correct, correct: 0, wrong: 0 };
+    mistakeCount[currentIPA].correct++;
+    setTimeout(nextQuestion, 800);
+  } else {
+    btn.classList.add("wrong");
+    btn.disabled = true;
+    score.wrong++;
+    if (!mistakeCount[currentIPA]) mistakeCount[currentIPA] = { name: correct, correct: 0, wrong: 0 };
+    mistakeCount[currentIPA].wrong++;
+  }
+  localStorage.setItem("mistakeCount", JSON.stringify(mistakeCount));
+  document.getElementById("score").textContent = `正解: ${score.correct} / 不正解: ${score.wrong}`;
+  updateTable();
+}
+
+nextQuestion();
+updateTable();
+</script>
+</body>
+</html>
